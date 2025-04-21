@@ -18,21 +18,21 @@ with app.app_context():
 @app.route("/")
 def index():
     items = MemoItem.query.order_by(MemoItem.title).all()
-    items.insert(0, {"id":0, "title":"✒️新規作成", "body":""})
+    items.insert(0, {"id": 0, "title": "✒️新規作成", "body": ""})
     return render_template("list.html", items=items)
 
 #メモ編集画面
 @app.route("/memo/<int:id>", methods=["GET", "POST"])
-def memo():
+def memo(id: int):
     it = MemoItem.query.get(id)
     if id ==0 or it is None:
         it = MemoItem(title="__無題__", body="")
         
     if request.method == "POST":
-        it.title = request.form.get("title","__無題__")
-        it.body = request.form.get("body","")
+        it.title = request.form.get("title", "__無題__")
+        it.body = request.form.get("body", "")
         
-        if it.title =="":
+        if it.title == "":
             return "タイトルは空にできません"
         
         if id == 0:
